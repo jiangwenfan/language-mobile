@@ -2,7 +2,7 @@
 project: open language
 
 backend:
-	- language-backend
+ - language-backend
 
 frontend: 
  - 移动端 language-mobile
