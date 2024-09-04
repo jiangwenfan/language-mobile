@@ -1,0 +1,56 @@
+name: Build and Release APK
+
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "version for the Android APK"
+        required: true
+        default: "latest"
+  # 暂不支持自动构建
+  # push:
+  #   tags:
+  #     - 'v*.*.*' # 当推送符合该模式的标签时触发
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Java 11
+        uses: actions/setup-java@v2
+        with:
+          distribution: "adopt"
+          java-version: "11"
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          # 请根据需要调整版本
+          flutter-version: "3.22.2"
+
+      # 将 .env 配置内容写入到 .env 文件
+      - name: write config to .env
+        run: echo ${{ secrets.ENV_CONFIG_CONTENT }} > .env
+
+      - name: Flutter Pub Get
+        run: flutter pub get
+
+      - name: Build APK
+        run: flutter build apk --release
+
+      - name: Upload APK to GitHub Release
+        uses: ncipollo/release-action@v1
+        with:
+          artifacts: build/app/outputs/flutter-apk/app-release.apk
+          # 在 Actions 运行时自动生成
+          token: ${{ secrets.GITHUB_TOKEN }}
+          # tag: ${{ github.ref }}
+          # name: Release ${{ github.ref }}
+          tag: ${{ inputs.tag }}
+          name: Release ${{ inputs.tag }}
+          draft: false
+          prerelease: false
