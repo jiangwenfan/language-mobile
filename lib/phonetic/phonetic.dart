@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import './douyinPage.dart';
+import 'douyinPage.dart';
 
 class ToolsPage extends StatefulWidget {
   @override
