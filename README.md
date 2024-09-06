@@ -1,4 +1,3 @@
-# openLanguage-frontend
 project: open language
 
 backend:

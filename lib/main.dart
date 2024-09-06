@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import './home/home.dart';
-import './phonetic/phonetic.dart';
-import './mine/mine.dart';
+import 'pages/home/home.dart';
+import 'widgets/phonetic/phonetic.dart';
+import 'widgets/mine/mine.dart';
 
 void main() {
   runApp(const MyApp());
