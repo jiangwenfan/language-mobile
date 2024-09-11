@@ -1,11 +1,9 @@
-import 'package:flutter/material.dart';
-
 import '../utils/network.dart';
 import 'package:dio/dio.dart';
 
 // 获取用户配置信息
 Future<Map> getProfile() async {
-  var dio = createDio();
+  var dio;
   var response;
   try {
     // 读取token传递
@@ -16,26 +14,20 @@ Future<Map> getProfile() async {
       logger.e("获取token失败,token为空");
       return {};
     }
+    var dio = createDio(token: token);
+
     // 解析token
     // Map token = await parseToken(token);
     // int profileId = token["profile_id"];
     int profileId = 1;
 
-    // 添加拦截器以携带 token
-    dio.interceptors.add(InterceptorsWrapper(
-      onRequest: (options, handler) {
-        // 在请求头中添加 token
-        options.headers['Authorization'] = 'Bearer $token';
-        return handler.next(options); // 继续请求
-      },
-    ));
-
     response = await dio.get("$homeUrl/profiles/$profileId");
+    // response = await dio.get("$homeUrl/languages/");
   } on DioException catch (e) {
     logger.e("获取用户配置信息失败: 响应:${e.response.toString()}");
     return {};
   } finally {
-    dio.close();
+    dio?.close();
   }
   int? code = response.statusCode;
 

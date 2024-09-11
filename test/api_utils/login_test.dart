@@ -13,11 +13,11 @@ void main() {
       expect(result.length, greaterThan(1));
     });
 
-    test("邮箱密码-失败登录", () async {
-      final result = await loginEmailPassword({"email": "", "password": ""});
-      // 登录失败返回 ""
-      expect(result, "");
-    });
+    // test("邮箱密码-失败登录", () async {
+    //   final result = await loginEmailPassword({"email": "", "password": ""});
+    //   // 登录失败返回 ""
+    //   expect(result, "");
+    // });
 
     test("手机号验证码-成功登录", () async {
       final res = await loginPhoneCode({

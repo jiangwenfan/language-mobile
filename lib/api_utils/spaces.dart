@@ -3,35 +3,28 @@ import 'package:flutter/material.dart';
 import '../utils/network.dart';
 import 'package:dio/dio.dart';
 
-// 获取用户所有的空间.
-// 成功返回 List<Map>. map有id,use_language,learn_language
-// 失败返回 []
+/// - 获取用户所有的空间.
+/// 成功返回 List<Map>. map有id,use_language,learn_language
+/// 失败返回 []
 Future<List> getUserAllSpaces() async {
-  var dio = createDio();
   var response;
+  var dio;
 
   try {
     // 读取token传递
     // String token = await readToken();
+    // if (token == "") {
+    //   logger.e("获取token失败,token为空");
+    //   return [];
+    // }
     String token =
         "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzI4MTgyMDg3LCJpYXQiOjE3MjU1OTAwODcsImp0aSI6ImM0NWIxYTM0MDM4YzRiNmY5NTY5M2EzMmY4MDBiZDJlIiwidXNlcl9pZCI6MX0.8iKnf4crVRoE5l2RE9pm6CB0d3GnjZku2z7RteuHs2s";
-    if (token == "") {
-      logger.e("获取token失败,token为空");
-      return [];
-    }
 
     // 从token中解析出用户id
     Map tokenMap = await parseToken(token);
     int userId = tokenMap["user_id"];
 
-    // 添加拦截器以携带 token
-    dio.interceptors.add(InterceptorsWrapper(
-      onRequest: (options, handler) {
-        // 在请求头中添加 token
-        options.headers['Authorization'] = 'Bearer $token';
-        return handler.next(options); // 继续请求
-      },
-    ));
+    dio = createDio(token: token);
 
     String url = "$homeUrl/users/$userId/study-spaces/";
     logger.d("url: $url");
@@ -55,5 +48,84 @@ Future<List> getUserAllSpaces() async {
   return [];
 }
 
+/// 创建用户的学习空间
+/// ```json
+///
+/// ```
+Future createSpace(
+    {required int useLanguageId, required int learnLanguageId}) async {
+  var response;
+  var dio;
 
-// TODO 创建用户空间
+  try {
+    // 读取token传递
+    // String token = await readToken();
+    // if (token == "") {
+    //   logger.e("获取token失败,token为空");
+    //   return [];
+    // }
+    String token =
+        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzI4MTgyMDg3LCJpYXQiOjE3MjU1OTAwODcsImp0aSI6ImM0NWIxYTM0MDM4YzRiNmY5NTY5M2EzMmY4MDBiZDJlIiwidXNlcl9pZCI6MX0.8iKnf4crVRoE5l2RE9pm6CB0d3GnjZku2z7RteuHs2s";
+
+    dio = createDio(token: token);
+
+    // 解析token
+    // Map token = await parseToken(token);
+    // int userId = token["user_id"];
+    int userId = 1;
+
+    response = await dio.post("$homeUrl/users/$userId/study-spaces/", data: {
+      "use_language": {"id": useLanguageId},
+      "learn_language": {"id": learnLanguageId}
+    });
+  } on DioException catch (e) {
+    logger.e("创建学习空间失败: 响应:${e.response.toString()}");
+    return [];
+  } finally {
+    dio?.close();
+  }
+
+  int? code = response.statusCode;
+  if (code == 201) {
+    logger.w("创建学习空间成功: ${response.data}");
+    return response.data;
+  }
+  return [];
+}
+
+// 删除用户空间
+Future deleteSpace({required int spaceId}) async {
+  var response;
+  var dio;
+
+  try {
+    // 读取token传递
+    String token = await readToken();
+    if (token == "") {
+      logger.e("获取token失败,token为空");
+      return [];
+    }
+
+    dio = createDio(token: token);
+
+    // 解析token
+    // Map token = await parseToken(token);
+    // int userId = token["user_id"];
+    int userId = 1;
+
+    response =
+        await dio.delete("$homeUrl/users/$userId/study-spaces/$spaceId/");
+  } on DioException catch (e) {
+    logger.e("删除学习空间失败: 响应:${e.response.toString()}");
+    return [];
+  } finally {
+    dio?.close();
+  }
+
+  int? code = response.statusCode;
+  if (code == 204) {
+    logger.i("删除学习空间成功: ${response.data}");
+    return response.data;
+  }
+  return [];
+}

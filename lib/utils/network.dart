@@ -6,10 +6,13 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
 
 var homeUrl = "https://host.open-language.space:9080";
-var logger = Logger();
+
+var logger = Logger(
+  level: Level.warning,
+);
 
 // 取消证书验证的Dio实例
-Dio createDio() {
+Dio createDio({String? token}) {
   var dio = Dio();
   // 自定义 HttpClientAdapter 来忽略 SSL 证书验证
   (dio.httpClientAdapter as DefaultHttpClientAdapter).onHttpClientCreate =
@@ -18,6 +21,19 @@ Dio createDio() {
         (X509Certificate cert, String host, int port) => true;
     return client;
   };
+
+  if (token != null) {
+    // 添加拦截器以携带 token
+    dio.interceptors.add(InterceptorsWrapper(
+      onRequest: (options, handler) {
+        // 在请求头中添加 token
+        options.headers['Authorization'] = 'Bearer $token';
+        print("-->${'Bearer $token'}");
+        return handler.next(options); // 继续请求
+      },
+    ));
+  }
+
   return dio;
 }
 
