@@ -1,36 +1,47 @@
+import '../home_browse/home.dart';
+import '../home_bookshelf/bookshelf.dart';
+import 'package:open_language/pages/home_mine/mine.dart';
 import 'package:flutter/material.dart';
-import '../login/email_password.dart';
-import '../login/init_user_study_space.dart';
 
-class HomePage extends StatefulWidget {
+class MyHomePage extends StatefulWidget {
+  const MyHomePage({super.key, required this.arguments});
+
+  final Map arguments;
+  final String title = "hello";
+
   @override
-  State<StatefulWidget> createState() {
-    return HomePageState();
-  }
+  State<MyHomePage> createState() => _MyHomePageState();
 }
 
-class HomePageState extends State {
+class _MyHomePageState extends State<MyHomePage> {
+  int _currentIndex = 0;
+  List<Widget> data = [
+    BrowsePage(),
+    BookshelfPage(),
+    MinePage(),
+  ];
+
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        ElevatedButton(
-            onPressed: () {
-              Navigator.of(context)
-                  .push(MaterialPageRoute(builder: (BuildContext context) {
-                return EmailPasswordPage();
-              }));
-            },
-            child: Text("登录页面")),
-        ElevatedButton(
-            onPressed: () {
-              Navigator.of(context)
-                  .push(MaterialPageRoute(builder: (BuildContext context) {
-                return InitUserStudySpacePage();
-              }));
-            },
-            child: Text("初始化用户学习空间"))
-      ],
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(widget.title),
+      ),
+      body: data[_currentIndex],
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: _currentIndex,
+        onTap: (index) {
+          setState(() {
+            _currentIndex = index;
+          });
+        },
+        items: [
+          BottomNavigationBarItem(
+              icon: Icon(Icons.travel_explore), label: "浏览"),
+          BottomNavigationBarItem(icon: Icon(Icons.menu_book), label: "书架"),
+          BottomNavigationBarItem(icon: Icon(Icons.person), label: "我的"),
+        ],
+      ),
     );
   }
 }

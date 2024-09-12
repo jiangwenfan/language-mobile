@@ -54,6 +54,21 @@ Future<String> readToken() async {
   return token ?? "";
 }
 
+// 写入spaceId
+Future<void> writeSpaceId(int spaceId) async {
+  final prefs = await SharedPreferences.getInstance();
+  prefs.setInt("spaceId", spaceId);
+  logger.i("写入spaceId成功: $spaceId");
+}
+
+// 读取spaceId
+Future<int> readSpaceId() async {
+  final prefs = await SharedPreferences.getInstance();
+  int? spaceId = prefs.getInt("spaceId");
+  logger.i("读取spaceId成功: $spaceId");
+  return spaceId ?? 0;
+}
+
 // 解析token
 Future<Map> parseToken(String token) async {
   final parts = token.split('.');

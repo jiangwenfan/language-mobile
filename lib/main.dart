@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'pages/home/home.dart';
-import 'widgets/phonetic/phonetic.dart';
-import 'widgets/mine/mine.dart';
+import 'route.dart';
 
 void main() {
   runApp(const MyApp());
@@ -18,48 +16,8 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const MyHomePage(title: 'home'),
-    );
-  }
-}
-
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
-
-  final String title;
-
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  int _currentIndex = 0;
-  List<Widget> data = [
-    HomePage(),
-    ToolsPage(),
-    MinePage(),
-  ];
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-      ),
-      body: data[_currentIndex],
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _currentIndex,
-        onTap: (index) {
-          setState(() {
-            _currentIndex = index;
-          });
-        },
-        items: [
-          BottomNavigationBarItem(icon: Icon(Icons.add), label: "学习链"),
-          BottomNavigationBarItem(icon: Icon(Icons.search), label: "工具"),
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: "我的"),
-        ],
-      ),
+      initialRoute: "/check",
+      onGenerateRoute: onGenerateRoute22,
     );
   }
 }

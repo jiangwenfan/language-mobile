@@ -1,18 +1,19 @@
 import 'package:flutter/material.dart';
 
-class MinePage extends StatefulWidget{
+class MinePage extends StatefulWidget {
+  const MinePage({super.key});
+
   @override
   State<StatefulWidget> createState() {
-    // TODO: implement createState
     return MinePageState();
   }
 }
 
-class MinePageState extends State{
+class MinePageState extends State {
   @override
   Widget build(BuildContext context) {
-    return Column(children: [
-
-    ],);
+    return Column(
+      children: [],
+    );
   }
 }
