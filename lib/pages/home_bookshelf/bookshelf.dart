@@ -14,10 +14,8 @@ class BookshelfPage extends StatefulWidget {
 class BookshelfPageState extends State<BookshelfPage> {
   @override
   Widget build(BuildContext context) {
-    return const Column(
-      children: [
-        Text("书架页面"),
-      ],
+    return const Placeholder(
+      color: Colors.blue,
     );
   }
 }

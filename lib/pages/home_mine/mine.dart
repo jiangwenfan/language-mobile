@@ -12,8 +12,6 @@ class MinePage extends StatefulWidget {
 class MinePageState extends State {
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [],
-    );
+    return const Placeholder();
   }
 }
